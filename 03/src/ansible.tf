@@ -2,7 +2,7 @@ locals {
   webservers_list = yandex_compute_instance.web_vms
   databases_map   = yandex_compute_instance.db_vms
   storage_list    = [yandex_compute_instance.storage]
-  bastion_list    = [yandex_compute_instance.bastion] # Обернуто в список!
+  bastion_list    = yandex_compute_instance.bastion # <-- Убрали лишние скобки!
 }
 
 resource "local_file" "ansible_inventory" {

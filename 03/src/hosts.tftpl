@@ -13,6 +13,7 @@ ${vm.name} ansible_host=${vm.network_interface.0.ip_address} fqdn=${vm.fqdn}
 ${vm.name} ansible_host=${vm.network_interface.0.ip_address} fqdn=${vm.fqdn}
 %{ endfor ~}
 
+%{ if length(bastion) > 0 ~}
 [bastion]
 %{ for vm in bastion ~}
 ${vm.name} ansible_host=${vm.network_interface.0.nat_ip_address} fqdn=${vm.fqdn}
@@ -21,3 +22,4 @@ ${vm.name} ansible_host=${vm.network_interface.0.nat_ip_address} fqdn=${vm.fqdn}
 [all:vars]
 ansible_user=ubuntu
 ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -q ubuntu@${bastion[0].network_interface.0.nat_ip_address}"'
+%{ endif ~}
