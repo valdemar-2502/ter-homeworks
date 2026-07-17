@@ -1,0 +1,14 @@
+---
+- name: Test connection through bastion
+  hosts: all
+  gather_facts: false
+  become: yes
+
+  tasks:
+    - name: Test connection
+      command: echo "Connected to {{ inventory_hostname }}"
+      register: result
+
+    - name: Show result
+      debug:
+        msg: "{{ result.stdout }}"

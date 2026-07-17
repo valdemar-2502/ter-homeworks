@@ -52,3 +52,15 @@ variable "public_key_path" {
   default     = "~/.ssh/id_rsa.pub"
   description = "Path to public SSH key"
 }
+
+variable "create_bastion" {
+  type        = bool
+  default     = true
+  description = "Создавать ли бастион-сервер с внешним IP"
+}
+
+variable "run_ansible" {
+  type        = bool
+  default     = false
+  description = "Запустить ansible-playbook после создания ресурсов"
+}

@@ -1,14 +1,23 @@
 [webservers]
-%{ for i in webservers ~}
-${i.name} ansible_host=${coalesce(i.network_interface.0.nat_ip_address, i.network_interface.0.ip_address)} fqdn=${i.fqdn}
+%{ for vm in webservers ~}
+${vm.name} ansible_host=${vm.network_interface.0.ip_address} fqdn=${vm.fqdn}
 %{ endfor ~}
 
 [databases]
-%{ for key, i in databases ~}
-${i.name} ansible_host=${coalesce(i.network_interface.0.nat_ip_address, i.network_interface.0.ip_address)} fqdn=${i.fqdn}
+%{ for vm_name, vm in databases ~}
+${vm.name} ansible_host=${vm.network_interface.0.ip_address} fqdn=${vm.fqdn}
 %{ endfor ~}
 
 [storage]
-%{ for i in storage ~}
-${i.name} ansible_host=${coalesce(i.network_interface.0.nat_ip_address, i.network_interface.0.ip_address)} fqdn=${i.fqdn}
+%{ for vm in storage ~}
+${vm.name} ansible_host=${vm.network_interface.0.ip_address} fqdn=${vm.fqdn}
 %{ endfor ~}
+
+[bastion]
+%{ for vm in bastion ~}
+${vm.name} ansible_host=${vm.network_interface.0.nat_ip_address} fqdn=${vm.fqdn}
+%{ endfor ~}
+
+[all:vars]
+ansible_user=ubuntu
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -q ubuntu@${bastion[0].network_interface.0.nat_ip_address}"'
